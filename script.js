@@ -1,156 +1,120 @@
-// ================================
 // MOBILE MENU
-// ================================
 
 const menuButton = document.querySelector(".menu-toggle");
 const nav = document.querySelector("#nav");
 
 if (menuButton && nav) {
-  menuButton.addEventListener("click", () => {
+  menuButton.addEventListener("click", function () {
     nav.classList.toggle("open");
   });
 }
 
-
-// Close mobile menu after clicking a link
-
-document.querySelectorAll("#nav a").forEach((link) => {
-
-  link.addEventListener("click", () => {
-
+document.querySelectorAll("#nav a").forEach(function (link) {
+  link.addEventListener("click", function () {
     if (nav) {
       nav.classList.remove("open");
     }
-
   });
-
 });
 
 
-// ================================
 // FOOTER YEAR
-// ================================
 
-const yearElement = document.getElementById("year");
+const year = document.getElementById("year");
 
-if (yearElement) {
-  yearElement.textContent = new Date().getFullYear();
+if (year) {
+  year.textContent = new Date().getFullYear();
 }
 
 
-// ================================
 // CONTACT FORM
-// ================================
 
 const contactForm = document.getElementById("contact-form");
 const formStatus = document.getElementById("form-status");
+const sendButton = document.getElementById("send-button");
 
 if (contactForm) {
 
-  contactForm.addEventListener("submit", async (event) => {
+  contactForm.addEventListener("submit", function (event) {
 
-    // Stop normal form submission
-    // so the visitor does not get a 404 page.
+    // VERY IMPORTANT:
+    // Stop the browser from leaving/reloading the page.
 
     event.preventDefault();
-
-
-    // Get the submit button
-
-    const submitButton =
-      contactForm.querySelector('button[type="submit"]');
-
-
-    // Show sending message
+    event.stopPropagation();
 
     if (formStatus) {
-      formStatus.textContent =
-  "✓ Message sent successfully! Thank you for contacting me.";
-
-
-    // Disable button while sending
-
-    if (submitButton) {
-      submitButton.disabled = true;
-      submitButton.textContent = "Sending...";
+      formStatus.textContent = "Sending message...";
+      formStatus.style.color = "#2563eb";
+      formStatus.style.fontWeight = "700";
+      formStatus.style.opacity = "1";
     }
 
-
-    // Collect form data
+    if (sendButton) {
+      sendButton.disabled = true;
+      sendButton.textContent = "Sending...";
+    }
 
     const formData = new FormData(contactForm);
 
-
-    try {
-
-      // Send the form to FormSubmit AJAX endpoint
-
-      const response = await fetch(
-        "https://formsubmit.co/ajax/zuwaria43e9@gmail.com",
-        {
-          method: "POST",
-
-          headers: {
-            Accept: "application/json"
-          },
-
-          body: formData
+    fetch(
+      "https://formsubmit.co/ajax/zuwaria43e9@gmail.com",
+      {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json"
         }
-      );
+      }
+    )
+      .then(function (response) {
 
+        return response.json();
 
-      // Read FormSubmit response
-
-      const result = await response.json();
-
-
-      // Successful submission
-
-      if (response.ok) {
+      })
+      .then(function (data) {
 
         if (formStatus) {
+
           formStatus.textContent =
-            "Message sent successfully! Thank you for contacting me.";
+            "✓ Message sent successfully! Thank you for contacting me.";
+
+          formStatus.style.color = "#15803d";
+          formStatus.style.fontWeight = "700";
+          formStatus.style.opacity = "1";
+          formStatus.style.display = "block";
         }
-
-
-        // Clear the form
 
         contactForm.reset();
 
-      } else {
+      })
+      .catch(function (error) {
+
+        console.error(error);
 
         if (formStatus) {
+
           formStatus.textContent =
-            result.message ||
-            "Unable to send the message. Please try again.";
+            "✕ Unable to send message. Please try again.";
+
+          formStatus.style.color = "#dc2626";
+          formStatus.style.fontWeight = "700";
+          formStatus.style.opacity = "1";
+          formStatus.style.display = "block";
         }
 
-      }
+      })
+      .finally(function () {
 
-    } catch (error) {
+        if (sendButton) {
 
-      console.error("Contact form error:", error);
+          sendButton.disabled = false;
 
-      if (formStatus) {
-        formStatus.textContent =
-          "Something went wrong. Please try again.";
-      }
+          sendButton.textContent =
+            "Send Message ↗";
+        }
 
-    } finally {
-
-      // Enable button again
-
-      if (submitButton) {
-
-        submitButton.disabled = false;
-
-        submitButton.textContent =
-          "Send Message ↗";
-
-      }
-
-    }
+      });
 
   });
 
