@@ -198,11 +198,14 @@ footer a:hover { color:var(--accent); }
   .building-box { padding:32px 24px; }
   footer { flex-direction:column; }
 }
-/* Contact form status message */
+/* Contact form success/error message */
 #form-status {
-  color: #16a34a;
-  font-weight: 700;
-  font-size: 16px;
-  margin-top: 16px;
-  text-align: center;
+  display: block !important;
+  margin-top: 18px !important;
+  color: #15803d !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  text-align: center !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
