@@ -64,8 +64,8 @@ if (contactForm) {
     // Show sending message
 
     if (formStatus) {
-      formStatus.textContent = "Sending message...";
-    }
+      formStatus.textContent =
+  "✓ Message sent successfully! Thank you for contacting me.";
 
 
     // Disable button while sending
